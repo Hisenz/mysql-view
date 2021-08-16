@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.github.hisenz.mysqlview.mysqlview.mapper.DataSourceInfoMapper">
+    <insert id="add" parameterType="io.github.hisenz.mysqlview.mysqlview.entity.DataSourceInfo">
+        insert into mysql_view.data_source_info(url, driver, username, password)
+            value (#{url}, #{driver}, #{username}, #{password})
+    </insert>
+    <update id="update" parameterType="io.github.hisenz.mysqlview.mysqlview.entity.DataSourceInfo">
+        update mysql_view.data_source_info
+        <set>
+            <if test="url != null">
+                url=#{url},
+            </if>
+            <if test="driver != null">
+                driver=#{driver},
+            </if>
+            <if test="username != null">
+                username=#{username},
+            </if>
+            <if test="driver != null">
+                password=#{password}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="deleteById">
+        delete
+        from mysql_view.data_source_info
+        where id = #{id}
+    </delete>
+    <select id="findAll" resultType="io.github.hisenz.mysqlview.mysqlview.entity.DataSourceInfo">
+        select id, url, username, password, driver
+        from data_source_info
+    </select>
+</mapper>

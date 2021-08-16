@@ -6,3 +6,28 @@ spring:
     username: guest
     url: jdbc:mysql://localhost:3306/mysql_view?allowMultiQueries=true&useUnicode&characterEncoding=UTF-8&autoReconnect=true&useSSL=true&verifyServerCertificate=false&requireSSL=true
     password: guest_user
+    schema:
+      - classpath:init/init.sql
+    initialization-mode: always
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: true
+    testOnReturn: false
+    poolPreparedStatements: true
+    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+logging:
+  level:
+    io.github.hisenz.mysqlview.mysqlview.mapper: debug
