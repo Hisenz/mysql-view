@@ -8,7 +8,10 @@ import java.util.Objects;
 @Data
 public class DataSourceInfo implements Serializable {
     private static final long serialVersionUID = 7758214534259611362L;
+
     private Integer id;
+
+    private String name;
 
     private String url;
 

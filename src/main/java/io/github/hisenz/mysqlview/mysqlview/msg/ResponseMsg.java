@@ -6,7 +6,7 @@ import lombok.Data;
  * 统一接口响应
  */
 @Data
-public class ResponseMsg {
+public class  ResponseMsg {
     private String message;
     private boolean result;
     private Object data;
