@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.hisenz.mysqlview.mysqlview.mapper.SchemataDao">
+  <resultMap id="BaseResultMap" type="io.github.hisenz.mysqlview.mysqlview.entity.Schemata">
+    <result column="CATALOG_NAME" jdbcType="VARCHAR" property="catalogName" />
+    <result column="SCHEMA_NAME" jdbcType="VARCHAR" property="schemaName" />
+    <result column="DEFAULT_CHARACTER_SET_NAME" jdbcType="VARCHAR" property="defaultCharacterSetName" />
+    <result column="DEFAULT_COLLATION_NAME" jdbcType="VARCHAR" property="defaultCollationName" />
+    <result column="DEFAULT_ENCRYPTION" jdbcType="OTHER" property="defaultEncryption" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="io.github.hisenz.mysqlview.mysqlview.entity.Schemata">
+    <result column="SQL_PATH" jdbcType="VARBINARY" property="sqlPath" />
+  </resultMap>
+  <sql id="Blob_Column_List">
+    SQL_PATH
+  </sql>
+  <insert id="insert" parameterType="io.github.hisenz.mysqlview.mysqlview.entity.Schemata">
+    insert into SCHEMATA (`CATALOG_NAME`, `SCHEMA_NAME`, DEFAULT_CHARACTER_SET_NAME, 
+      DEFAULT_COLLATION_NAME, DEFAULT_ENCRYPTION, 
+      SQL_PATH)
+    values (#{catalogName,jdbcType=VARCHAR}, #{schemaName,jdbcType=VARCHAR}, #{defaultCharacterSetName,jdbcType=VARCHAR}, 
+      #{defaultCollationName,jdbcType=VARCHAR}, #{defaultEncryption,jdbcType=OTHER}, 
+      #{sqlPath,jdbcType=VARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="io.github.hisenz.mysqlview.mysqlview.entity.Schemata">
+    insert into SCHEMATA
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="catalogName != null">
+        `CATALOG_NAME`,
+      </if>
+      <if test="schemaName != null">
+        `SCHEMA_NAME`,
+      </if>
+      <if test="defaultCharacterSetName != null">
+        DEFAULT_CHARACTER_SET_NAME,
+      </if>
+      <if test="defaultCollationName != null">
+        DEFAULT_COLLATION_NAME,
+      </if>
+      <if test="defaultEncryption != null">
+        DEFAULT_ENCRYPTION,
+      </if>
+      <if test="sqlPath != null">
+        SQL_PATH,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="catalogName != null">
+        #{catalogName,jdbcType=VARCHAR},
+      </if>
+      <if test="schemaName != null">
+        #{schemaName,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultCharacterSetName != null">
+        #{defaultCharacterSetName,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultCollationName != null">
+        #{defaultCollationName,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultEncryption != null">
+        #{defaultEncryption,jdbcType=OTHER},
+      </if>
+      <if test="sqlPath != null">
+        #{sqlPath,jdbcType=VARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <select id="findAll" resultMap="BaseResultMap">
+    select * from information_schema.SCHEMATA
+  </select>
+</mapper>
