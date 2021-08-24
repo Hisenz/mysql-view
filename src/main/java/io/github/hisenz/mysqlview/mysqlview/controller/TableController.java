@@ -4,14 +4,12 @@ import io.github.hisenz.mysqlview.mysqlview.entity.Table;
 import io.github.hisenz.mysqlview.mysqlview.msg.ResponseMsg;
 import io.github.hisenz.mysqlview.mysqlview.service.tableService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/table")
 public class TableController {
     @Autowired

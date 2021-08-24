@@ -6,6 +6,7 @@ import io.github.hisenz.mysqlview.mysqlview.service.DataSourceInfoService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/dataSource")
 public class DataSourceInfoController {
     private final DataSourceInfoService dataSourceInfoService;
@@ -31,7 +32,7 @@ public class DataSourceInfoController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseMsg update(@PathVariable int id) {
+    public ResponseMsg delete(@PathVariable int id) {
         return ResponseMsg.create("", dataSourceInfoService.remove(id));
     }
 
