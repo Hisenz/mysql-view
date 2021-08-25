@@ -15,4 +15,6 @@ public interface DataSourceInfoService {
     boolean change(DataSourceInfo info);
 
     boolean remove(int id);
+
+    boolean validation(DataSourceInfo info);
 }

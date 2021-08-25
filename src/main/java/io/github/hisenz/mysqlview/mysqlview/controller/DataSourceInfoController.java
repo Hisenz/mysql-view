@@ -36,4 +36,10 @@ public class DataSourceInfoController {
         return ResponseMsg.create("", dataSourceInfoService.remove(id));
     }
 
+
+    @PostMapping("/testConnection")
+    public ResponseMsg testConnect(@RequestBody DataSourceInfo info) {
+        boolean validation = dataSourceInfoService.validation(info);
+        return ResponseMsg.create("", validation);
+    }
 }

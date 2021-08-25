@@ -29,6 +29,7 @@ public class DataSourceInfoServiceImpl extends ApplicationEvent implements DataS
     private final DataSource dataSource;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
     public DataSourceInfoServiceImpl(DataSourceInfoMapper dataSourceInfoMapper, DataSource dataSource) {
         super(DataSourceInfoServiceImpl.class);
         this.dataSourceInfoMapper = dataSourceInfoMapper;
@@ -38,7 +39,7 @@ public class DataSourceInfoServiceImpl extends ApplicationEvent implements DataS
 
     @Override
     public void exchange(DataSourceInfo dataSourceInfo) throws NoSuchFieldException, IllegalAccessException, SQLException {
-        DataSourceInfo o = (DataSourceInfo)redisTemplate.opsForHash().get(RedisConstants.DATA_SOURCE_KEY, RedisConstants.DATA_SOURCE_CURRENT_KEY);
+        DataSourceInfo o = (DataSourceInfo) redisTemplate.opsForHash().get(RedisConstants.DATA_SOURCE_KEY, RedisConstants.DATA_SOURCE_CURRENT_KEY);
         if (Objects.equals(o, dataSourceInfo)) {
             LOGGER.info("data source info not change, do not exchange");
             return;
@@ -57,12 +58,13 @@ public class DataSourceInfoServiceImpl extends ApplicationEvent implements DataS
         druidDataSource.restart();
     }
 
-    private boolean validation(DataSourceInfo dataSourceInfo) {
+    @Override
+    public boolean validation(DataSourceInfo dataSourceInfo) {
         try {
             // z注册驱动
             Class.forName(dataSourceInfo.getDriver());
             // 打开链接
-            Connection connection = DriverManager.getConnection(dataSourceInfo.getUrl(), dataSourceInfo.getUsername(),  dataSourceInfo.getPassword());
+            Connection connection = DriverManager.getConnection(dataSourceInfo.getUrl(), dataSourceInfo.getUsername(), dataSourceInfo.getPassword());
             connection.close();
             return true;
         } catch (ClassNotFoundException | SQLException e) {
@@ -78,6 +80,9 @@ public class DataSourceInfoServiceImpl extends ApplicationEvent implements DataS
 
     @Override
     public boolean append(DataSourceInfo info) {
+        if (!validation(info)) {
+            return false;
+        }
         return dataSourceInfoMapper.add(info) == 1;
     }
 
