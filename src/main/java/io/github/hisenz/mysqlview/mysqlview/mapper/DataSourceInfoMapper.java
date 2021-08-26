@@ -14,4 +14,6 @@ public interface DataSourceInfoMapper {
     int update(DataSourceInfo info);
 
     int deleteById(int id);
+
+    DataSourceInfo findByName(String name);
 }

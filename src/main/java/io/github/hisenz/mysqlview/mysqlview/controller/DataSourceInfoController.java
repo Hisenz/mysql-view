@@ -20,14 +20,10 @@ public class DataSourceInfoController {
         return ResponseMsg.create("", true, dataSourceInfoService.findAll());
     }
 
-    @PutMapping
-    public ResponseMsg append(@RequestBody DataSourceInfo info) {
-        return ResponseMsg.create("", dataSourceInfoService.append(info));
-    }
 
     @PostMapping
-    public ResponseMsg update(@RequestBody DataSourceInfo info) {
-        return ResponseMsg.create("", dataSourceInfoService.change(info));
+    public ResponseMsg appendOrUpdate(@RequestBody DataSourceInfo info) {
+        return ResponseMsg.create("", dataSourceInfoService.appendOrUpdate(info));
     }
 
 

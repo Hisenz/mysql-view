@@ -10,11 +10,9 @@ public interface DataSourceInfoService {
 
     List<DataSourceInfo> findAll();
 
-    boolean append(DataSourceInfo info);
-
-    boolean change(DataSourceInfo info);
-
     boolean remove(int id);
 
     boolean validation(DataSourceInfo info);
+
+    boolean appendOrUpdate(DataSourceInfo info);
 }

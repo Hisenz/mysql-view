@@ -18,7 +18,7 @@ public class SchemaController {
     @Autowired
     private SchemaService schemaService;
     @GetMapping("/list")
-    public ResponseMsg listSchema() {
+    public ResponseMsg listSchema(String dataSourceName) {
         List<Schemata> resultList = schemaService.findAll();
         return ResponseMsg.create("", true, resultList);
     }

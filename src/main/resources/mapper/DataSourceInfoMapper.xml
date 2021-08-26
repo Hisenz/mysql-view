@@ -35,4 +35,11 @@
         select id, name, url, username, password, driver
         from data_source_info
     </select>
+    <select id="findByName" resultType="io.github.hisenz.mysqlview.mysqlview.entity.DataSourceInfo"
+            parameterType="string">
+        select id, name, url, username, password, driver
+        from data_source_info
+        where name = #{name}
+    </select>
+
 </mapper>

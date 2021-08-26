@@ -79,16 +79,14 @@ public class DataSourceInfoServiceImpl extends ApplicationEvent implements DataS
     }
 
     @Override
-    public boolean append(DataSourceInfo info) {
+    public boolean appendOrUpdate(DataSourceInfo info) {
         if (!validation(info)) {
             return false;
         }
+        if (dataSourceInfoMapper.findByName(info.getName()) != null) {
+            return dataSourceInfoMapper.update(info) == 1;
+        }
         return dataSourceInfoMapper.add(info) == 1;
-    }
-
-    @Override
-    public boolean change(DataSourceInfo info) {
-        return dataSourceInfoMapper.update(info) == 1;
     }
 
     @Override
