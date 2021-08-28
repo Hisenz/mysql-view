@@ -15,4 +15,6 @@ public interface DataSourceInfoService {
     boolean validation(DataSourceInfo info);
 
     boolean appendOrUpdate(DataSourceInfo info);
+
+    DataSourceInfo findByName(String dataSource);
 }

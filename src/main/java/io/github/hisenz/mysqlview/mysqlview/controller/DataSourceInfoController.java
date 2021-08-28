@@ -26,7 +26,6 @@ public class DataSourceInfoController {
         return ResponseMsg.create("", dataSourceInfoService.appendOrUpdate(info));
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseMsg delete(@PathVariable int id) {
         return ResponseMsg.create("", dataSourceInfoService.remove(id));

@@ -179,4 +179,10 @@
             where TABLE_SCHEMA = #{schema}
         </if>
     </select>
+    <select id="findData" resultType="java.util.Map">
+        select * from ${schema}.${tableName}
+    </select>
+    <select id="isExists" resultType="java.lang.Boolean">
+        select count(*) from information_schema.TABLES where TABLE_SCHEMA = #{schema} and TABLE_NAME = #{tableName}
+    </select>
 </mapper>

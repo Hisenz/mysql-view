@@ -22,4 +22,14 @@ class TablesDaoTest {
     void findBySchema() {
         System.out.println(tablesDao.findBySchema(null));
     }
+
+    @Test
+    void findData() {
+        System.out.println(tablesDao.findData("mysql_view", "data_source_info"));
+    }
+
+    @Test
+    void isExist() {
+        System.out.println(tablesDao.isExists("mysql_view", "data_source_info"));
+    }
 }

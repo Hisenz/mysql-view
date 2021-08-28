@@ -90,6 +90,11 @@ public class DataSourceInfoServiceImpl extends ApplicationEvent implements DataS
     }
 
     @Override
+    public DataSourceInfo findByName(String dataSource) {
+        return dataSourceInfoMapper.findByName(dataSource);
+    }
+
+    @Override
     public boolean remove(int id) {
         return dataSourceInfoMapper.deleteById(id) == 1;
     }
