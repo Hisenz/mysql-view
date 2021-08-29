@@ -1,6 +1,7 @@
 package io.github.hisenz.mysqlview.mysqlview.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import io.github.hisenz.mysqlview.mysqlview.costant.DataSourceConstants;
 import io.github.hisenz.mysqlview.mysqlview.datasource.DynamicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,8 @@ public class DruidConfiguration {
         druidDataSource.setDriverClassName(driver);
         druidDataSource.setUsername(username);
         druidDataSource.setPassword(password);
-        return new DynamicDataSource(druidDataSource, new HashMap<>());
+        HashMap<Object, Object> targetDataSource = new HashMap<>();
+        targetDataSource.put(DataSourceConstants.DEFAULT_DATASOURCE_KEY, druidDataSource);
+        return new DynamicDataSource(druidDataSource, targetDataSource);
     }
 }

@@ -2,6 +2,7 @@ package io.github.hisenz.mysqlview.mysqlview.listener;
 
 import io.github.hisenz.mysqlview.mysqlview.costant.RedisConstants;
 import io.github.hisenz.mysqlview.mysqlview.datasource.DataSourceContext;
+import io.github.hisenz.mysqlview.mysqlview.datasource.DynamicDataSource;
 import io.github.hisenz.mysqlview.mysqlview.entity.DataSourceInfo;
 import io.github.hisenz.mysqlview.mysqlview.msg.ResponseMsg;
 import io.github.hisenz.mysqlview.mysqlview.service.DataSourceInfoService;
@@ -22,6 +23,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
+import java.util.List;
 
 /**
  * 监听请求，获取根据请求参数切换数据源
@@ -77,14 +79,19 @@ public class DataSourceListener implements CommandLineRunner {
      * 启动时将当前连接的数据库信息存入Redis缓存
      */
     private void initDataSourceConfig() {
-        final DataSourceInfo dataSourceInfo = new DataSourceInfo();
+        DataSourceInfo dataSourceInfo = new DataSourceInfo();
+        DynamicDataSource dynamicDataSource = (DynamicDataSource) this.dataSource;
         dataSourceInfo.setUrl(url);
         dataSourceInfo.setPassword(password);
         dataSourceInfo.setUsername(username);
         dataSourceInfo.setDriver(driver);
-        final HashOperations<String, Object, Object> opsForHash = redisTemplate.opsForHash();
-
-        opsForHash.put(RedisConstants.DATA_SOURCE_KEY, RedisConstants.DATA_SOURCE_DEFAULT_KEY, dataSourceInfo);
-        opsForHash.put(RedisConstants.DATA_SOURCE_KEY, RedisConstants.DATA_SOURCE_CURRENT_KEY, dataSourceInfo);
+        dataSourceInfo.setName(RedisConstants.DATA_SOURCE_CURRENT_KEY);
+        HashOperations<String, Object, Object> opsForHash = redisTemplate.opsForHash();
+        List<DataSourceInfo> allDataSources = dataSourceInfoService.findAll();
+        allDataSources.add(dataSourceInfo);
+        dynamicDataSource.addDataSources(allDataSources);
+        opsForHash.put(RedisConstants.DATA_SOURCE_KEY, RedisConstants.DATA_SOURCE_INFOS, allDataSources);
+        opsForHash.put(RedisConstants.DATA_SOURCE_KEY, RedisConstants.DATA_SOURCE_DEFAULT_KEY, dataSourceInfo.getName());
+        opsForHash.put(RedisConstants.DATA_SOURCE_KEY, RedisConstants.DATA_SOURCE_CURRENT_KEY, dataSourceInfo.getName());
     }
 }

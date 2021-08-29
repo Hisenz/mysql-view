@@ -1,0 +1,25 @@
+GET http://localhost:11001/schema/list?dataSource=阿里云
+
+HTTP/1.1 200
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Sun, 29 Aug 2021 06:54:07 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+
+###
+GET http://localhost:11001/table/mysql?dataSource=阿里云
+
+HTTP/1.1 200
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Sun, 29 Aug 2021 06:54:07 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive

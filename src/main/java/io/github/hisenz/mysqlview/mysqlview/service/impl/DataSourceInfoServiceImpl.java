@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +76,11 @@ public class DataSourceInfoServiceImpl extends ApplicationEvent implements DataS
 
     @Override
     public List<DataSourceInfo> findAll() {
+        HashOperations<String, Object, Object> opsForHash = redisTemplate.opsForHash();
+        List<DataSourceInfo> dataSourceInfos = (List<DataSourceInfo>) opsForHash.get(RedisConstants.DATA_SOURCE_KEY, RedisConstants.DATA_SOURCE_INFOS);
+        if (dataSourceInfos != null) {
+            return dataSourceInfos;
+        }
         return dataSourceInfoMapper.findAll();
     }
 
@@ -88,6 +94,7 @@ public class DataSourceInfoServiceImpl extends ApplicationEvent implements DataS
         }
         return dataSourceInfoMapper.add(info) == 1;
     }
+
 
     @Override
     public DataSourceInfo findByName(String dataSource) {
