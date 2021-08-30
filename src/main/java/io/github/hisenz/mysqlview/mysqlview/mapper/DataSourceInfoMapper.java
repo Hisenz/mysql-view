@@ -9,11 +9,13 @@ import java.util.List;
 public interface DataSourceInfoMapper {
     List<DataSourceInfo> findAll();
 
-    int add(DataSourceInfo info);
+    Boolean add(DataSourceInfo info);
 
-    int update(DataSourceInfo info);
+    Boolean update(DataSourceInfo info);
 
-    int deleteById(int id);
+    Boolean deleteById(DataSourceInfo info);
+
+    DataSourceInfo findById(int id);
 
     DataSourceInfo findByName(String name);
 }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="io.github.hisenz.mysqlview.mysqlview.mapper.DataSourceInfoMapper">
-    <insert id="add" parameterType="io.github.hisenz.mysqlview.mysqlview.entity.DataSourceInfo">
+    <insert id="add" parameterType="io.github.hisenz.mysqlview.mysqlview.entity.DataSourceInfo" useGeneratedKeys="true"
+            keyProperty="id">
         insert into mysql_view.data_source_info(name, url, driver, username, password)
             value (#{name}, #{url}, #{driver}, #{username}, #{password})
     </insert>
@@ -40,6 +41,11 @@
         select id, name, url, username, password, driver
         from data_source_info
         where name = #{name}
+    </select>
+    <select id="findById" resultType="io.github.hisenz.mysqlview.mysqlview.entity.DataSourceInfo">
+        select id, name, url, username, password, driver
+        from data_source_info
+        where id = #{id}
     </select>
 
 </mapper>

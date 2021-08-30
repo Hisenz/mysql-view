@@ -2,6 +2,8 @@ package io.github.hisenz.mysqlview.mysqlview.datasource;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import io.github.hisenz.mysqlview.mysqlview.entity.DataSourceInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.sql.DataSource;
@@ -10,6 +12,8 @@ import java.util.Map;
 
 public class DynamicDataSource extends AbstractRoutingDataSource {
     private final Map<Object, Object> backupTargetDataSource;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DynamicDataSource.class);
 
     @Override
     protected Object determineCurrentLookupKey() {
@@ -20,6 +24,13 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         backupTargetDataSource = targetDataSource;
         super.setDefaultTargetDataSource(defaultDataSource);
         super.setTargetDataSources(targetDataSource);
+        super.afterPropertiesSet();
+    }
+
+    public void remove(String key) {
+        backupTargetDataSource.remove(key);
+        LOGGER.info("datasource: {} has be delete", key);
+        super.setTargetDataSources(backupTargetDataSource);
         super.afterPropertiesSet();
     }
 
@@ -43,6 +54,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      * @param dataSource DataSource
      */
     public void addDataSource(String key, DataSource dataSource) {
+        LOGGER.info("datasource: {} appended, info: {}", key, dataSource.getClass());
         backupTargetDataSource.put(key, dataSource);
         super.setTargetDataSources(backupTargetDataSource);
         super.afterPropertiesSet();

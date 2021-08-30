@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -39,27 +38,6 @@ public class DataSourceInfoServiceImpl extends ApplicationEvent implements DataS
     }
 
     @Override
-    public void exchange(DataSourceInfo dataSourceInfo) throws NoSuchFieldException, IllegalAccessException, SQLException {
-        DataSourceInfo o = (DataSourceInfo) redisTemplate.opsForHash().get(RedisConstants.DATA_SOURCE_KEY, RedisConstants.DATA_SOURCE_CURRENT_KEY);
-        if (Objects.equals(o, dataSourceInfo)) {
-            LOGGER.info("data source info not change, do not exchange");
-            return;
-        }
-        DruidDataSource druidDataSource = (DruidDataSource) this.dataSource;
-        Field username = DruidAbstractDataSource.class.getDeclaredField("username");
-        Field jdbcUrl = DruidAbstractDataSource.class.getDeclaredField("jdbcUrl");
-        Field driverClass = DruidAbstractDataSource.class.getDeclaredField("driverClass");
-        username.setAccessible(true);
-        jdbcUrl.setAccessible(true);
-        driverClass.setAccessible(true);
-        username.set(dataSource, dataSourceInfo.getUsername());
-        jdbcUrl.set(dataSource, dataSourceInfo.getUrl());
-        driverClass.set(dataSource, dataSourceInfo.getDriver());
-        druidDataSource.setPassword(dataSourceInfo.getPassword());
-        druidDataSource.restart();
-    }
-
-    @Override
     public boolean validation(DataSourceInfo dataSourceInfo) {
         try {
             // z注册驱动
@@ -76,11 +54,6 @@ public class DataSourceInfoServiceImpl extends ApplicationEvent implements DataS
 
     @Override
     public List<DataSourceInfo> findAll() {
-        HashOperations<String, Object, Object> opsForHash = redisTemplate.opsForHash();
-        List<DataSourceInfo> dataSourceInfos = (List<DataSourceInfo>) opsForHash.get(RedisConstants.DATA_SOURCE_KEY, RedisConstants.DATA_SOURCE_INFOS);
-        if (dataSourceInfos != null) {
-            return dataSourceInfos;
-        }
         return dataSourceInfoMapper.findAll();
     }
 
@@ -90,9 +63,9 @@ public class DataSourceInfoServiceImpl extends ApplicationEvent implements DataS
             return false;
         }
         if (dataSourceInfoMapper.findByName(info.getName()) != null) {
-            return dataSourceInfoMapper.update(info) == 1;
+            return dataSourceInfoMapper.update(info);
         }
-        return dataSourceInfoMapper.add(info) == 1;
+        return dataSourceInfoMapper.add(info);
     }
 
 
@@ -103,6 +76,7 @@ public class DataSourceInfoServiceImpl extends ApplicationEvent implements DataS
 
     @Override
     public boolean remove(int id) {
-        return dataSourceInfoMapper.deleteById(id) == 1;
+        DataSourceInfo dataSourceInfo = dataSourceInfoMapper.findById(id);
+        return dataSourceInfoMapper.deleteById(dataSourceInfo);
     }
 }
