@@ -73,7 +73,7 @@ public class DataSourceListener implements CommandLineRunner {
             String dataSource = request.getParameter("dataSource");
             if (!DataSourceContext.getContextKey().equals(dataSource)) {
                 DataSourceInfo info = dataSourceInfoService.findByName(dataSource);
-                if (info == null) {
+                if (info == null || !dataSourceInfoService.validation(info)) {
                     return ResponseMsg.create("invalid datasource", false);
                 }
                 DataSourceContext.setContextKey(info.getName());

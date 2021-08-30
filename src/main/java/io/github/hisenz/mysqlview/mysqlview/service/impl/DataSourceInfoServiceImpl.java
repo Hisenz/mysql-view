@@ -1,9 +1,6 @@
 package io.github.hisenz.mysqlview.mysqlview.service.impl;
 
-import com.alibaba.druid.pool.DruidAbstractDataSource;
-import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson.JSONObject;
-import io.github.hisenz.mysqlview.mysqlview.costant.RedisConstants;
 import io.github.hisenz.mysqlview.mysqlview.entity.DataSourceInfo;
 import io.github.hisenz.mysqlview.mysqlview.mapper.DataSourceInfoMapper;
 import io.github.hisenz.mysqlview.mysqlview.service.DataSourceInfoService;
@@ -15,12 +12,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class DataSourceInfoServiceImpl extends ApplicationEvent implements DataSourceInfoService {
@@ -47,7 +42,7 @@ public class DataSourceInfoServiceImpl extends ApplicationEvent implements DataS
             connection.close();
             return true;
         } catch (ClassNotFoundException | SQLException e) {
-            LOGGER.error("connect database failed, connectInfo: {}, reason: {}", JSONObject.toJSONString(dataSourceInfo), e.getMessage());
+            LOGGER.error("connect database failed, connectInfo: {}, reason: {}, class: {}", JSONObject.toJSONString(dataSourceInfo), e.getMessage(), e.getClass());
         }
         return false;
     }
